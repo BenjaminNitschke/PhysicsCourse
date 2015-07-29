@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using GraphicsEngine;
-using PongMessages;
+using GraphicsEngine.Datatypes;
 
 namespace Pong
 {
@@ -33,15 +33,6 @@ namespace Pong
 		}
 
 		private static string title;
-
-		private static void SetOtherPaddlePosition(float y)
-		{
-			if (amILeftPaddle)
-				rightPaddleY = y;
-			else
-				leftPaddleY = y;
-		}
-
 		public static API GraphicsAPI;
 
 		private static void Init()
@@ -58,56 +49,52 @@ namespace Pong
 
 		private static void CreateSprites()
 		{
-			background = new Sprite(new Texture("Background.jpg"), 2.0f, 2.0f);
-			ball = new Sprite(new Texture("Ball.png"), Constants.BallWidth, Constants.BallHeight);
+			background = new Sprite(new Texture("Background.jpg"), new Vector2D(2.0f, 2.0f));
+			ball = new Ball(new Sprite(new Texture("Ball.png"), Constants.BallSize));
 			var paddleTexture = new Texture("Paddle.png");
-			leftPaddle = new Sprite(paddleTexture, Constants.PaddleWidth, Constants.PaddleHeight);
-			rightPaddle = new Sprite(paddleTexture, Constants.PaddleWidth, Constants.PaddleHeight);
+			leftPaddle = new Paddle(new Sprite(paddleTexture, Constants.PaddleSize));
+			leftPaddle.position = new Vector2D(Constants.LeftPaddleX, 0);
+			rightPaddle = new Paddle(new Sprite(paddleTexture, Constants.PaddleSize));
+			rightPaddle.position = new Vector2D(Constants.RightPaddleX, 0);
 		}
 
 		private static Sprite background;
-		private static Sprite ball;
-		private static readonly bool amILeftPaddle = false;
-		private static Sprite leftPaddle;
-		private static float leftPaddleY;
-		private static Sprite rightPaddle;
-		private static float rightPaddleY;
+		private static Ball ball;
+		private static Paddle leftPaddle;
+		private static Paddle rightPaddle;
 
 		private static void HandleInput(float timeDeltaInSeconds)
 		{
 			// AI
-			if (leftPaddleY < ballY + Constants.PaddleSpeed * timeDeltaInSeconds)
-				leftPaddleY += Constants.PaddleSpeed * timeDeltaInSeconds;
-			else if (leftPaddleY > ballY - Constants.PaddleSpeed * timeDeltaInSeconds)
-				leftPaddleY -= Constants.PaddleSpeed * timeDeltaInSeconds;
+			if (leftPaddle.position.y < ball.position.y + Constants.PaddleSpeed * timeDeltaInSeconds)
+				leftPaddle.position.y += Constants.PaddleSpeed * timeDeltaInSeconds;
+			else if (leftPaddle.position.y > ball.position.y - Constants.PaddleSpeed * timeDeltaInSeconds)
+				leftPaddle.position.y -= Constants.PaddleSpeed * timeDeltaInSeconds;
 			// Human player
-			if (form.DownPressed && rightPaddleY > -0.8f)
-				rightPaddleY -= Constants.PaddleSpeed * timeDeltaInSeconds;
-			if (form.UpPressed && rightPaddleY < 0.8f)
-				rightPaddleY += Constants.PaddleSpeed * timeDeltaInSeconds;
+			if (form.DownPressed && rightPaddle.position.y > -0.8f)
+				rightPaddle.position.y -= Constants.PaddleSpeed * timeDeltaInSeconds;
+			if (form.UpPressed && rightPaddle.position.y < 0.8f)
+				rightPaddle.position.y += Constants.PaddleSpeed * timeDeltaInSeconds;
 		}
-
-		private static float ballX;
-		private static float ballY;
-
+		
 		private static void HandleBall(float timeDeltaInSeconds)
 		{
-			ballX += ballVelocityX * timeDeltaInSeconds;
-			ballY += ballVelocityY * timeDeltaInSeconds;
-			if (ballY < -0.9f || ballY > 0.9f)
-				ballVelocityY = -ballVelocityY;
-			if (IsColliding(ballX, ballY, Constants.BallWidth, Constants.BallHeight,
-				Constants.RightPaddleX, rightPaddleY, Constants.PaddleWidth, Constants.PaddleHeight))
-				ballVelocityX = -Math.Abs(ballVelocityX);
-			if (IsColliding(ballX, ballY, Constants.BallWidth, Constants.BallHeight,
-				Constants.LeftPaddleX, leftPaddleY, Constants.PaddleWidth, Constants.PaddleHeight))
-				ballVelocityX = Math.Abs(ballVelocityX);
-			if (ballX < -1)
+			//TODO: tomorrow we will move this to PhysicsObject and add mass for force to change ball direction with paddle
+			ball.position += ballVelocity * timeDeltaInSeconds;
+			if (ball.position.y < -0.9f || ball.position.y > 0.9f)
+				ballVelocity.y = -ballVelocity.y;
+			if (IsColliding(ball.position, Constants.BallSize,
+				rightPaddle.position, Constants.PaddleSize))
+				ballVelocity.x = -Math.Abs(ballVelocity.x);
+			if (IsColliding(ball.position, Constants.BallSize,
+				leftPaddle.position, Constants.PaddleSize))
+				ballVelocity.x = Math.Abs(ballVelocity.x);
+			if (ball.position.x < -1)
 			{
 				rightPoints++;
 				ResetBall();
 			}
-			else if (ballX > 1)
+			else if (ball.position.x > 1)
 			{
 				leftPoints++;
 				ResetBall();
@@ -116,50 +103,36 @@ namespace Pong
 
 		private static int leftPoints;
 		private static int rightPoints;
-		private static float ballVelocityX = Constants.DefaultBallVelocityX;
-		private static float ballVelocityY = Constants.DefaultBallVelocityY;
+		private static Vector2D ballVelocity = Constants.DefaultBallVelocity;
 
-		public static bool IsColliding(float x, float y, float width, float height, float otherX,
-			float otherY, float otherWidth, float otherHeight)
+		public static bool IsColliding(Vector2D position1, Vector2D size1, Vector2D position2, Vector2D size2)
 		{
-			var left = x - width / 2;
-			var right = x + width / 2;
-			var top = y - height / 2;
-			var bottom = y + height / 2;
-			var otherLeft = otherX - otherWidth / 2;
-			var otherRight = otherX + otherWidth / 2;
-			var otherTop = otherY - otherHeight / 2;
-			var otherBottom = otherY + otherHeight / 2;
+			var left = position1.x - size1.x / 2;
+			var right = position1.x + size1.x / 2;
+			var top = position1.y - size1.y / 2;
+			var bottom = position1.y + size1.y / 2;
+			var otherLeft = position2.x - size2.x / 2;
+			var otherRight = position2.x + size2.x / 2;
+			var otherTop = position2.y - size2.y / 2;
+			var otherBottom = position2.y + size2.y / 2;
 			return right > otherLeft && bottom > otherTop && left < otherRight && top < otherBottom;
 		}
 
 		private static void ResetBall()
 		{
 			title = "Pong Score: " + leftPoints + " - " + rightPoints;
-			ballX = 0;
-			ballY = 0;
+			ball.position = Vector2D.Zero;
 			var random = new Random((int)DateTime.Now.Ticks);
-			ballVelocityX = (random.Next(2) == 0 ? -1 : +1) * Constants.DefaultBallVelocityX;
-			ballVelocityY = (random.Next(2) == 0 ? -1 : +1) * Constants.DefaultBallVelocityY;
+			ballVelocity = Constants.DefaultBallVelocity *
+				new Vector2D(random.Next(2) == 0 ? -1 : +1, random.Next(2) == 0 ? -1 : +1);
 		}
 
 		private static void DrawSprites()
 		{
 			background.Draw();
-			ball.Draw(ballX, ballY);
-			leftPaddle.Draw(Constants.LeftPaddleX, leftPaddleY);
-			rightPaddle.Draw(Constants.RightPaddleX, rightPaddleY);
+			ball.Draw();
+			leftPaddle.Draw();
+			rightPaddle.Draw();
 		}
-
-#if UNUSED
-        public static void ToggleAPIAndRestart()
-        {
-            GraphicsAPI = GraphicsAPI == API.OpenGL
-                ? API.OpenGL4
-                : API.OpenGL;
-            form.Close();
-            Init();
-        }
-#endif
 	}
 }

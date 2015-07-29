@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicsEngine", "GraphicsE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pong", "Pong\Pong.csproj", "{E2A1CEDA-93B0-4EBE-80D9-9F4702617EA8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicsEngine.Tests", "GraphicsEngine\Tests\GraphicsEngine.Tests.csproj", "{503B903A-D408-4C85-83E2-A1F1928E13CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E2A1CEDA-93B0-4EBE-80D9-9F4702617EA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2A1CEDA-93B0-4EBE-80D9-9F4702617EA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2A1CEDA-93B0-4EBE-80D9-9F4702617EA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{503B903A-D408-4C85-83E2-A1F1928E13CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{503B903A-D408-4C85-83E2-A1F1928E13CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{503B903A-D408-4C85-83E2-A1F1928E13CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{503B903A-D408-4C85-83E2-A1F1928E13CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
