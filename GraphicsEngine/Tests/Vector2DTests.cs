@@ -13,6 +13,14 @@ namespace GraphicsEngine.Tests
 			Assert.That(a + b, Is.EqualTo(new Vector2D(4, 6)));
 		}
 
+        [Test]
+        public void SubtractVectors()
+        {
+            var a = new Vector2D(1, 2);
+            var b = new Vector2D(3, 4);
+            Assert.That(b - a, Is.EqualTo(new Vector2D(2, 2)));
+        }
+
 		[Test]
 		public void DivideVector()
 		{
@@ -44,5 +52,16 @@ namespace GraphicsEngine.Tests
 			Assert.That(right.Rotate(180), Is.EqualTo(new Vector2D(-1, 0)));
 			Assert.That(right.Rotate(270), Is.EqualTo(new Vector2D(0, -1)));
 		}
+
+        [Test]
+        public void MirrorAtNormal()
+        {
+            Assert.That(new Vector2D(0.2f, -0.3f).MirrorAtNormal(new Vector2D(0, 1)),
+                Is.EqualTo(new Vector2D(0.2f, 0.3f)));
+            Assert.That(new Vector2D(0.2f, -0.3f).MirrorAtNormal(new Vector2D(1, 0)),
+                Is.EqualTo(new Vector2D(-0.2f, -0.3f)));
+            Assert.That(new Vector2D(-1, 0).MirrorAtNormal(new Vector2D(10, 10)),
+                Is.EqualTo(new Vector2D(0, 1)));
+        }
 	}
 }

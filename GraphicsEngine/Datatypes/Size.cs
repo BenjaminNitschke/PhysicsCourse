@@ -2,7 +2,7 @@
 {
 	public struct Size
 	{
-		public Size(float width, float height)
+		public Size(float width, float height) : this()
 		{
 			Width = width;
 			Height = height;

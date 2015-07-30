@@ -61,11 +61,9 @@ namespace Pong
 		{
 			if (ball.position.y < -0.55f || ball.position.y > 0.55f)
 				ball.velocity.y = -ball.velocity.y;
-			if (IsColliding(ball.position, Constants.BallSize,
-				rightPaddle.position, Constants.PaddleSize))
+			if (ball.IsColliding(rightPaddle))
 				ball.velocity.x = -Math.Abs(ball.velocity.x);
-			if (IsColliding(ball.position, Constants.BallSize,
-				leftPaddle.position, Constants.PaddleSize))
+			if (ball.IsColliding(leftPaddle))
 				ball.velocity.x = Math.Abs(ball.velocity.x);
 			if (ball.position.x < -1)
 			{
@@ -81,19 +79,6 @@ namespace Pong
 
 		private int leftPoints;
 		private int rightPoints;
-
-		public static bool IsColliding(Vector2D position1, Size size1, Vector2D position2, Size size2)
-		{
-			var left = position1.x - size1.Width / 2;
-			var right = position1.x + size1.Width / 2;
-			var top = position1.y - size1.Height / 2;
-			var bottom = position1.y + size1.Height / 2;
-			var otherLeft = position2.x - size2.Width / 2;
-			var otherRight = position2.x + size2.Width / 2;
-			var otherTop = position2.y - size2.Height / 2;
-			var otherBottom = position2.y + size2.Height / 2;
-			return right > otherLeft && bottom > otherTop && left < otherRight && top < otherBottom;
-		}
 
 		private void ResetBall()
 		{

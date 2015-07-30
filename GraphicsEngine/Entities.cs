@@ -10,16 +10,16 @@ namespace GraphicsEngine
 
 		public static void Register(object anything)
 		{
-			var updatable = anything as Updatable;
-			if (updatable != null)
-				UpdatableList.Add(updatable);
+			var physicsObject = anything as PhysicsObject;
+			if (physicsObject != null)
+				PhysicsObjects.Add(physicsObject);
 			var drawable = anything as Drawable;
 			if (drawable != null)
-				DrawableList.Add(drawable);
+				Drawables.Add(drawable);
 		}
 
-		private static readonly List<Updatable> UpdatableList = new List<Updatable>();
-		private static readonly List<Drawable> DrawableList = new List<Drawable>();
+		private static readonly List<PhysicsObject> PhysicsObjects = new List<PhysicsObject>();
+		private static readonly List<Drawable> Drawables = new List<Drawable>();
 
 		public static void UpdateAll(float timeDeltaInSeconds)
 		{
@@ -27,9 +27,31 @@ namespace GraphicsEngine
 			while (timeAccumulator > PhysicsUpdateTimeStep)
 			{
 				timeAccumulator -= PhysicsUpdateTimeStep;
-        foreach (var updatable in UpdatableList)
+				foreach (var updatable in PhysicsObjects)
 					updatable.Update(PhysicsUpdateTimeStep);
+				CollisionCheck();
 			}
+		}
+
+		private static void CollisionCheck()
+		{
+			for (var i = 0; i < PhysicsObjects.Count; i++)
+				for (var j = i; j < PhysicsObjects.Count; j++)
+					if (i != j && IsColliding(i, j))
+						OnCollision(i, j);
+		}
+
+		private static bool IsColliding(int index1, int index2)
+		{
+			var body1 = PhysicsObjects[index1];
+			var body2 = PhysicsObjects[index2];
+			return body1.IsColliding(body2);
+		}
+
+		private static void OnCollision(int index1, int index2)
+		{
+			PhysicsObjects[index1].CollisionHappenedWith(PhysicsObjects[index2]);
+			PhysicsObjects[index2].CollisionHappenedWith(PhysicsObjects[index1]);
 		}
 
 		private static float timeAccumulator;
@@ -37,7 +59,7 @@ namespace GraphicsEngine
 
 		public static void DrawAll()
 		{
-			foreach (var drawable in DrawableList)
+			foreach (var drawable in Drawables)
 				drawable.Draw();
 		}
 	}

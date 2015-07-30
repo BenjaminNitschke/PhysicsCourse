@@ -25,6 +25,11 @@ namespace GraphicsEngine.Datatypes
 			return new Vector2D(first.x + second.x, first.y + second.y);
 		}
 
+        public static Vector2D operator -(Vector2D first, Vector2D second)
+        {
+            return new Vector2D(first.x - second.x, first.y - second.y);
+        }
+
 		public static Vector2D operator /(Vector2D vector, float divident)
 		{
 			return new Vector2D(vector.x / divident, vector.y / divident);
@@ -77,5 +82,23 @@ namespace GraphicsEngine.Datatypes
 		}
 
 		private const float DegreeToRadians = (float)Math.PI / 180.0f;
-	}
+
+        public Vector2D MirrorAtNormal(Vector2D normal)
+        {
+            normal = normal.Normalize();
+            return this - (normal * 2 * DotProduct(normal));
+        }
+
+        public Vector2D Normalize()
+        {
+            return this / Length;
+        }
+
+        private float DotProduct(Vector2D other)
+        {
+            return x * other.x + y * other.y;
+        }
+
+        public float Length { get { return (float)Math.Sqrt(x * x + y * y); } }
+    }
 }

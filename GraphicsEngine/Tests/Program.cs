@@ -15,11 +15,14 @@ namespace GraphicsEngine.Tests
 		protected override void Init()
 		{
 			base.Init();
+      for (int i=0; i<12; i++)
+          new Circle(new Vector2D(-1+i/6.0f, i*0.07f), 0.1f);
+      /*simple box and circle test
 			var box = new Box(Vector2D.Zero, new Size(0.4f, 0.4f));
 			box.velocity = new Vector2D(0.5f, 0.2f);
-			box.collisionFriction = 0.6f;
 			var circle = new Circle(new Vector2D(0.5f, 0), 0.2f);
 			circle.velocity = new Vector2D(-0.1f, -0.3f);
+      */
 		}
 	}
 }
