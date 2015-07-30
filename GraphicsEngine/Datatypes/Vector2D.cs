@@ -26,10 +26,10 @@ namespace GraphicsEngine.Datatypes
 			return new Vector2D(first.x + second.x, first.y + second.y);
 		}
 
-        public static Vector2D operator -(Vector2D first, Vector2D second)
-        {
-            return new Vector2D(first.x - second.x, first.y - second.y);
-        }
+		public static Vector2D operator -(Vector2D first, Vector2D second)
+		{
+			return new Vector2D(first.x - second.x, first.y - second.y);
+		}
 
 		public static Vector2D operator /(Vector2D vector, float divident)
 		{
@@ -46,15 +46,15 @@ namespace GraphicsEngine.Datatypes
 			return new Vector2D(first.x * second.x, first.y * second.y);
 		}
 
-        public static implicit operator Vector2(Vector2D vector)
-        {
-            return new Vector2(vector.x, vector.y);
-        }
+		public static implicit operator Vector2(Vector2D vector)
+		{
+			return new Vector2(vector.x, vector.y);
+		}
 
-        public static explicit operator Vector2D(Vector2 vector)
-        {
-            return new Vector2D(vector.X, vector.Y);
-        }
+		public static explicit operator Vector2D(Vector2 vector)
+		{
+			return new Vector2D(vector.X, vector.Y);
+		}
 
 		public override bool Equals(object obj)
 		{
@@ -64,8 +64,8 @@ namespace GraphicsEngine.Datatypes
 
 		public bool Equals(Vector2D other)
 		{
-			return x > other.x - Epsilon && x < other.x + Epsilon &&
-				y > other.y - Epsilon && y < other.y + Epsilon;
+			return x > other.x - Epsilon && x < other.x + Epsilon && y > other.y - Epsilon &&
+						y < other.y + Epsilon;
 		}
 
 		private const float Epsilon = 0.0001f;
@@ -87,29 +87,29 @@ namespace GraphicsEngine.Datatypes
 
 		public Vector2D Rotate(float angle)
 		{
-			float sin = (float)Math.Sin(angle * DegreeToRadians);
-			float cos = (float)Math.Cos(angle * DegreeToRadians);
+			var sin = (float)Math.Sin(angle * DegreeToRadians);
+			var cos = (float)Math.Cos(angle * DegreeToRadians);
 			return new Vector2D(cos * x - sin * y, sin * x + cos * y);
 		}
 
 		private const float DegreeToRadians = (float)Math.PI / 180.0f;
 
-        public Vector2D MirrorAtNormal(Vector2D normal)
-        {
-            normal = normal.Normalize();
-            return this - (normal * 2 * DotProduct(normal));
-        }
+		public Vector2D MirrorAtNormal(Vector2D normal)
+		{
+			normal = normal.Normalize();
+			return this - (normal * 2 * DotProduct(normal));
+		}
 
-        public Vector2D Normalize()
-        {
-            return this / Length;
-        }
+		public Vector2D Normalize()
+		{
+			return this / Length;
+		}
 
-        private float DotProduct(Vector2D other)
-        {
-            return x * other.x + y * other.y;
-        }
+		private float DotProduct(Vector2D other)
+		{
+			return x * other.x + y * other.y;
+		}
 
-        public float Length { get { return (float)Math.Sqrt(x * x + y * y); } }
-    }
+		public float Length { get { return (float)Math.Sqrt(x * x + y * y); } }
+	}
 }

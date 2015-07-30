@@ -48,6 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API.cs" />
+    <Compile Include="Datatypes\Vector3D.cs" />
+    <Compile Include="Meshes\Cube.cs" />
+    <Compile Include="RenderMode.cs" />
     <Compile Include="Shapes\Circle.cs" />
     <Compile Include="Shapes\Box.cs" />
     <Compile Include="Common.cs" />

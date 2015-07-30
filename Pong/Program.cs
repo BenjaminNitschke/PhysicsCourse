@@ -11,7 +11,7 @@ namespace Pong
 		[STAThread]
 		private static void Main()
 		{
-			new Program().Run();
+			new Program().Run(RenderMode.Render2D);
 		}
 
 		protected override void Update()

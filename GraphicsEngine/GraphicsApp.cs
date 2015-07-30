@@ -15,17 +15,16 @@ namespace GraphicsEngine
 
 		private readonly string name;
 
-		public void Run()
+		public void Run(RenderMode renderMode)
 		{
 			Init();
-			//graphics.Init3D();
+			graphics.Init(renderMode);
 			while (true)
 			{
 				Application.DoEvents();
 				if (form.IsDisposed)
 					break;
 				graphics.Render();
-				//graphics.Draw3DCube();
 				UpdateTime();
 				Update();
         Entities.UpdateAll(TimeDeltaInSeconds);
