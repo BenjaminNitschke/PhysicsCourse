@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 using GraphicsEngine;
 using GraphicsEngine.Datatypes;
 
@@ -31,7 +30,7 @@ namespace Pong
 			base.Init();
 			Entities.Register(new Sprite(new Texture("Background.jpg"), new Size(2.0f, 1.4f)));
 			ball = new Ball(new Sprite(new Texture("Ball.png"), Constants.BallSize));
-			ball.velocity = Constants.DefaultBallVelocity;
+			//TODO: ball.velocity = Constants.DefaultBallVelocity;
 			var paddleTexture = new Texture("Paddle.png");
 			leftPaddle = new Paddle(new Sprite(paddleTexture, Constants.PaddleSize),
 				new Vector2D(Constants.LeftPaddleX, 0));
@@ -59,12 +58,14 @@ namespace Pong
 		
 		private void HandleBall(float timeDeltaInSeconds)
 		{
+			/*TODO:
 			if (ball.position.y < -0.55f || ball.position.y > 0.55f)
 				ball.velocity.y = -ball.velocity.y;
 			if (ball.IsColliding(rightPaddle))
 				ball.velocity.x = -Math.Abs(ball.velocity.x);
 			if (ball.IsColliding(leftPaddle))
 				ball.velocity.x = Math.Abs(ball.velocity.x);
+			*/
 			if (ball.position.x < -1)
 			{
 				rightPoints++;
@@ -85,8 +86,8 @@ namespace Pong
 			title = "Pong Score: " + leftPoints + " - " + rightPoints;
 			ball.position = Vector2D.Zero;
 			var random = new Random((int)DateTime.Now.Ticks);
-			ball.velocity = Constants.DefaultBallVelocity *
-				new Vector2D(random.Next(2) == 0 ? -1 : +1, random.Next(2) == 0 ? -1 : +1);
+			//TODO: ball.velocity = Constants.DefaultBallVelocity *
+			//	new Vector2D(random.Next(2) == 0 ? -1 : +1, random.Next(2) == 0 ? -1 : +1);
 		}
 	}
 }

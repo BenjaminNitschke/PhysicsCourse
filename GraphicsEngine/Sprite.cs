@@ -15,7 +15,7 @@ namespace GraphicsEngine
 		}
 
 		private readonly Texture texture;
-		public Size Size { get; }
+        public Size Size { get; private set; }
 
 		private float[] vertices;
 		private readonly float[] uvs = { 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f };

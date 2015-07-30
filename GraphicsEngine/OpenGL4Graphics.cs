@@ -108,7 +108,7 @@ void main()
             GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, StrideInBytes, 3 * 4);
 
             Matrix4 prespective = Matrix4.CreatePerspectiveFieldOfView(Common.FieldOfView,
-                (float)form.ClientSize.Width / (float)form.ClientSize.Bottom,
+                (float)form.ClientSize.Width / (float)form.ClientSize.Height,
                 Common.NearPlane, Common.FarPlane);
             Matrix4 view = Matrix4.CreateTranslation(Common.CameraX, Common.CameraY, Common.CameraZ) *
                 Matrix4.CreateRotationY(Common.CameraRotationY);
@@ -145,7 +145,7 @@ void main()
 
         public void Render()
         {
-            GL.Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Bottom);
+            GL.Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height);
             var color = common.BackgroundColor;
             GL.ClearColor(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, 1);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);

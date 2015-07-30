@@ -4,6 +4,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace GraphicsEngine.Shapes
 {
+    /*TODO
 	public class Box : PhysicsObject, Drawable
 	{
 		public Box(Vector2D position, Size size) : base(position, size)
@@ -31,5 +32,6 @@ namespace GraphicsEngine.Shapes
 			GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedShort,
 				indices);
 		}
-	}
+    }
+     */
 }

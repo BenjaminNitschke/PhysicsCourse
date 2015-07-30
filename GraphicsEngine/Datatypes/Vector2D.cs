@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
 
 namespace GraphicsEngine.Datatypes
 {
@@ -44,6 +45,16 @@ namespace GraphicsEngine.Datatypes
 		{
 			return new Vector2D(first.x * second.x, first.y * second.y);
 		}
+
+        public static implicit operator Vector2(Vector2D vector)
+        {
+            return new Vector2(vector.x, vector.y);
+        }
+
+        public static explicit operator Vector2D(Vector2 vector)
+        {
+            return new Vector2D(vector.X, vector.Y);
+        }
 
 		public override bool Equals(object obj)
 		{

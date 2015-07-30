@@ -1,3 +1,6 @@
+using FarseerPhysics;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
 using GraphicsEngine.Datatypes;
 using GraphicsEngine.Physics2D;
 using OpenTK.Graphics.OpenGL;
@@ -7,10 +10,14 @@ namespace GraphicsEngine.Shapes
 	public class Circle : PhysicsObject, Drawable
 	{
 		public Circle(Vector2D position, float radius)
-			: base(position, new Size(radius * 2, radius * 2))
+			: base(position, new Size(radius * 2, radius * 2),
+            BodyFactory.CreateCircle(Entities.world, radius, 1.0f, position, BodyType.Dynamic))
 		{
 			this.radius = radius;
 			Entities.Register(this);
+            body.IsStatic = false;
+            body.Restitution = 1;
+            body.Friction = 0.01f;
 		}
 
 		private readonly float radius;

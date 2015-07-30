@@ -6,7 +6,7 @@ namespace Pong
 {
 	public class Paddle : PhysicsSprite
 	{
-		public Paddle(Sprite sprite, Vector2D position) : base(sprite, position)
+		public Paddle(Sprite sprite, Vector2D position) : base(sprite, position, null)//TODO
 		{
 			Entities.Register(this);
 		}
