@@ -17,11 +17,7 @@ namespace GraphicsEngine
 			context = new GraphicsContext(GraphicsMode.Default, windowInfo);
 			context.MakeCurrent(windowInfo);
 			context.LoadAll();
-			timer = new Stopwatch();
-			timer.Start();
 		}
-
-		private Stopwatch timer;
 
 		public void Init3D()
 		{
@@ -51,13 +47,12 @@ namespace GraphicsEngine
 			var color = common.BackgroundColor;
 			GL.ClearColor(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, 1);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			var newTime = timer.ElapsedTicks / (float)Stopwatch.Frequency;
-			TimeDeltaInSeconds = newTime - currentTime;
-			currentTime = newTime;
+			GL.MatrixMode(MatrixMode.Projection);
+			var aspectRatio = (float)form.ClientSize.Width / form.ClientSize.Height;
+			GL.LoadIdentity();
+      GL.Scale(1, aspectRatio, 1);
+			GL.MatrixMode(MatrixMode.Modelview);
 		}
-
-		private float currentTime;
-		public float TimeDeltaInSeconds { get; private set; }
 
 		public void Draw3DCube()
 		{

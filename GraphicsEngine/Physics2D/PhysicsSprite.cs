@@ -1,8 +1,10 @@
-﻿namespace GraphicsEngine.Physics2D
+﻿using GraphicsEngine.Datatypes;
+
+namespace GraphicsEngine.Physics2D
 {
-	public abstract class PhysicsSprite : PhysicsObject
+	public abstract class PhysicsSprite : PhysicsObject, Drawable
 	{
-		protected PhysicsSprite(Sprite sprite)
+		protected PhysicsSprite(Sprite sprite, Vector2D position) : base(position, sprite.Size)
 		{
 			this.sprite = sprite;
 		}

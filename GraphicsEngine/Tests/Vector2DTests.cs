@@ -33,5 +33,16 @@ namespace GraphicsEngine.Tests
 		{
 			Assert.That(new Vector2D(1.5f, 2.5f).ToString(), Is.EqualTo("1.5, 2.5"));
 		}
+
+		[Test]
+		public void RotateVector()
+		{
+			var right = new Vector2D(1, 0);
+			Assert.That(right.Rotate(0), Is.EqualTo(right));
+			Assert.That(new Vector2D(0, 1).Rotate(0), Is.EqualTo(new Vector2D(0, 1)));
+			Assert.That(right.Rotate(90), Is.EqualTo(new Vector2D(0, 1)));
+			Assert.That(right.Rotate(180), Is.EqualTo(new Vector2D(-1, 0)));
+			Assert.That(right.Rotate(270), Is.EqualTo(new Vector2D(0, -1)));
+		}
 	}
 }

@@ -3,9 +3,9 @@ using OpenTK.Graphics.OpenGL;
 
 namespace GraphicsEngine
 {
-	public class Sprite
+	public class Sprite : Drawable
 	{
-		public Sprite(Texture texture, Vector2D size)
+		public Sprite(Texture texture, Size size)
 		{
 			this.texture = texture;
 			Size = size;
@@ -15,7 +15,7 @@ namespace GraphicsEngine
 		}
 
 		private readonly Texture texture;
-		public Vector2D Size { get; }
+		public Size Size { get; }
 
 		private float[] vertices;
 		private readonly float[] uvs = { 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f };
@@ -28,14 +28,16 @@ namespace GraphicsEngine
 
 		public void Draw(Vector2D position)
 		{
+			GL.Enable(EnableCap.Texture2D);
 			GL.BindTexture(TextureTarget.Texture2D, texture.Handle);
-			var halfSize = Size / 2;
+			var halfWidth = Size.Width / 2;
+			var halfHeight = Size.Height / 2;
 			vertices = new[]
 			{
-				position.x - halfSize.x, position.y + halfSize.y, 0,
-				position.x - halfSize.x, position.y - halfSize.y, 0,
-				position.x + halfSize.x, position.y - halfSize.y, 0,
-				position.x + halfSize.x, position.y + halfSize.y, 0
+				position.x - halfWidth, position.y + halfHeight, 0,
+				position.x - halfWidth, position.y - halfHeight, 0,
+				position.x + halfWidth, position.y - halfHeight, 0,
+				position.x + halfWidth, position.y + halfHeight, 0
 			};
 			GL.EnableClientState(ArrayCap.TextureCoordArray);
 			GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, uvs);
