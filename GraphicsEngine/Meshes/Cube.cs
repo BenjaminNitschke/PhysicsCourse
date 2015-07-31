@@ -1,4 +1,7 @@
 ﻿using GraphicsEngine.Datatypes;
+using Jitter.Collision.Shapes;
+using Jitter.Dynamics;
+using Jitter.LinearMath;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -9,8 +12,11 @@ namespace GraphicsEngine.Meshes
 		public Cube(Texture texture, Vector3D position)
 		{
 			this.texture = texture;
-			renderMatrix = Matrix4.CreateTranslation(position.x, position.y, position.z);
 			Entities.Register(this);
+			var shape = new BoxShape(1, 1, 1);
+			body = new RigidBody(shape);
+			body.Position = new JVector(position.x, position.y, position.z);
+			Entities.world3D.AddBody(body);
 			// Create 3D Cube from Vertices and Indices
 			vertices = new Vector3D[NumberOfVertices] // 6*4 = 24 edge points
 			{
@@ -60,15 +66,14 @@ namespace GraphicsEngine.Meshes
 				20, 22, 21, 22, 20, 23
 			};
 		}
-
-		private Matrix4 renderMatrix;
-
+		
 		private void SetNormals(int face, Vector3D normal)
 		{
 			for (int i = face * 4; i < face * 4 + 4; i++)
 				normals[i] = normal;
 		}
 
+		private RigidBody body;
 		private Texture texture;
 		private Vector3D[] vertices;
 		private Vector3D[] normals;
@@ -83,6 +88,7 @@ namespace GraphicsEngine.Meshes
 
 		public void Draw()
 		{
+			Matrix4 renderMatrix = ToMatrix4(body.Orientation, body.Position);
 			var modelView = renderMatrix * Common.ViewMatrix;
 			GL.LoadMatrix(ref modelView);
 			GL.Enable(EnableCap.Texture2D);
@@ -95,6 +101,15 @@ namespace GraphicsEngine.Meshes
 			GL.VertexPointer(3, VertexPointerType.Float, 0, vertices);
 			GL.DrawElements(PrimitiveType.Triangles, NumberOfIndices,
 				DrawElementsType.UnsignedShort, indices);
+		}
+
+		private static Matrix4 ToMatrix4(JMatrix m, JVector position)
+		{
+			return new Matrix4(
+				m.M11, m.M12, m.M13, 0,
+				m.M21, m.M22, m.M23, 0,
+				m.M31, m.M32, m.M33, 0,
+				position.X, position.Y, position.Z, 1);
 		}
 	}
 }

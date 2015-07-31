@@ -45,7 +45,7 @@ namespace GraphicsEngine
 				GL.LoadMatrix(ref prespective);
 				GL.MatrixMode(MatrixMode.Modelview);
 				Common.ViewMatrix = Matrix4.LookAt(Common.CameraPosition.x, Common.CameraPosition.y,
-					Common.CameraPosition.z, 0, 0, 0, 0, 0, 1);
+					Common.CameraPosition.z, 0, 0, 4, 0, 0, 1);
 				GL.LoadMatrix(ref Common.ViewMatrix);
 			}
 		}

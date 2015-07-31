@@ -1,41 +1,61 @@
 using System.Collections.Generic;
-using GraphicsEngine.Datatypes;
-using GraphicsEngine.Physics2D;
 using FarseerPhysics.Dynamics;
-using Microsoft.Xna.Framework;
 using FarseerPhysics.Factories;
+using GraphicsEngine.Physics2D;
 using GraphicsEngine.Shapes;
+using Jitter.Collision;
+using Jitter.Collision.Shapes;
+using Jitter.Dynamics;
+using Jitter.LinearMath;
+using Microsoft.Xna.Framework;
 
 namespace GraphicsEngine
 {
 	public static class Entities
 	{
-        static Entities()
-        {
-           world = new World(Gravity);
-           Vector2 groundPosition = new Vector2(0, GroundAndSidePlanes.Bottom);
-           var ground = BodyFactory.CreateRectangle(world, 10, 0.1f, 1f, groundPosition);
-           ground.IsStatic = true;
-           ground.Restitution = 1;
-           ground.Friction = 0.01f;
-           var leftWall = BodyFactory.CreateRectangle(world, 0.1f, 4.0f, 1f,
-               new Vector2(GroundAndSidePlanes.Left, 0));
-           leftWall.IsStatic = true;
-           leftWall.Restitution = 1;
-           leftWall.Friction = 0.01f;
-           var rightWall = BodyFactory.CreateRectangle(world, 0.1f, 4.0f, 1f,
-               new Vector2(GroundAndSidePlanes.Right, 0));
-           rightWall.IsStatic = true;
-           rightWall.Restitution = 1;
-           rightWall.Friction = 0.01f;
-        }
+		static Entities()
+		{
+			InitPhysics2D();
+			InitPhysics3D();
+		}
 
-        public static World world;
-        public static Vector2 Gravity = new Vector2(0, -9.81f);
+		private static void InitPhysics2D()
+		{
+			world2D = new World(new Vector2(0, -G));
+			var groundPosition = new Vector2(0, GroundAndSidePlanes.Bottom);
+			var ground = BodyFactory.CreateRectangle(world2D, 10, 0.1f, 1f, groundPosition);
+			ground.IsStatic = true;
+			ground.Restitution = 1;
+			ground.Friction = 0.01f;
+			var leftWall = BodyFactory.CreateRectangle(world2D, 0.1f, 4.0f, 1f,
+				new Vector2(GroundAndSidePlanes.Left, 0));
+			leftWall.IsStatic = true;
+			leftWall.Restitution = 1;
+			leftWall.Friction = 0.01f;
+			var rightWall = BodyFactory.CreateRectangle(world2D, 0.1f, 4.0f, 1f,
+				new Vector2(GroundAndSidePlanes.Right, 0));
+			rightWall.IsStatic = true;
+			rightWall.Restitution = 1;
+			rightWall.Friction = 0.01f;
+		}
+
+		public static World world2D;
+		private const float G = 9.81f;
+
+		private static void InitPhysics3D()
+		{
+			world3D = new Jitter.World(new CollisionSystemBrute());
+			world3D.Gravity = new JVector(0, 0, -G);
+			var groundPlaneBody = new RigidBody(new BoxShape(100, 100, 0.1f));
+			groundPlaneBody.IsStatic = true;
+      world3D.AddBody(groundPlaneBody);
+		}
+
+		public static Jitter.World world3D;
 
 		public static void Register(object anything)
 		{
-            var physicsObject = anything as PhysicsObject;
+			var physicsObject = anything as PhysicsObject;
 			if (physicsObject != null)
 				PhysicsObjects.Add(physicsObject);
 			var drawable = anything as Drawable;
@@ -43,26 +63,27 @@ namespace GraphicsEngine
 				Drawables.Add(drawable);
 		}
 
-        private static readonly List<PhysicsObject> PhysicsObjects = new List<PhysicsObject>();
+		private static readonly List<PhysicsObject> PhysicsObjects = new List<PhysicsObject>();
 		private static readonly List<Drawable> Drawables = new List<Drawable>();
 
 		public static void UpdateAll(float timeDeltaInSeconds)
 		{
 			timeAccumulator += timeDeltaInSeconds;
-            while (timeAccumulator > PhysicsUpdateTimeStep)
-            {
-                timeAccumulator -= PhysicsUpdateTimeStep;
-                world.Step(PhysicsUpdateTimeStep);
-                foreach (var updatable in PhysicsObjects)
-                    updatable.Update(PhysicsUpdateTimeStep);
-                //CollisionCheck();
-            }
-        }
+			while (timeAccumulator > PhysicsUpdateFixedTimeStep)
+			{
+				timeAccumulator -= PhysicsUpdateFixedTimeStep;
+				world2D.Step(PhysicsUpdateFixedTimeStep);
+				world3D.Step(PhysicsUpdateFixedTimeStep, true);
+				foreach (var updatable in PhysicsObjects)
+					updatable.Update(PhysicsUpdateFixedTimeStep);
+				//CollisionCheck();
+			}
+		}
 
-        private static float timeAccumulator;
-        private const float PhysicsUpdateTimeStep = 1 / 60.0f;
+		private static float timeAccumulator;
+		private const float PhysicsUpdateFixedTimeStep = 1 / 60.0f;
 
-        /*
+		/*
         private static void CollisionCheck()
         {
             for (int i = 0; i < PhysicsObjects.Count; i++)

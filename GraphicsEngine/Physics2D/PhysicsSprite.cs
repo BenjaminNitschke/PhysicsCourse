@@ -6,7 +6,7 @@ namespace GraphicsEngine.Physics2D
 	public abstract class PhysicsSprite : PhysicsObject, Drawable
 	{
 		protected PhysicsSprite(Sprite sprite, Vector2D position, Body body)
-            : base(position, sprite.Size, body)
+			: base(position, sprite.Size, body)
 		{
 			this.sprite = sprite;
 		}
