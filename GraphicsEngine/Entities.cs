@@ -73,7 +73,7 @@ namespace GraphicsEngine
 			{
 				timeAccumulator -= PhysicsUpdateFixedTimeStep;
 				world2D.Step(PhysicsUpdateFixedTimeStep);
-				world3D.Step(PhysicsUpdateFixedTimeStep, true);
+				world3D.Step(PhysicsUpdateFixedTimeStep * 1.5f, true);
 				foreach (var updatable in PhysicsObjects)
 					updatable.Update(PhysicsUpdateFixedTimeStep);
 				//CollisionCheck();

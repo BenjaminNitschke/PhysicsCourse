@@ -40,9 +40,9 @@ namespace GraphicsEngine
 					new[] { Common.LightPosition.x, Common.LightPosition.y, Common.LightPosition.z });
 				GL.Enable(EnableCap.Light0);
 				GL.MatrixMode(MatrixMode.Projection);
-				var prespective = Matrix4.CreatePerspectiveFieldOfView(Common.FieldOfView,
+				Common.ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(Common.FieldOfView,
 					form.ClientSize.Width / (float)form.ClientSize.Height, Common.NearPlane, Common.FarPlane);
-				GL.LoadMatrix(ref prespective);
+				GL.LoadMatrix(ref Common.ProjectionMatrix);
 				GL.MatrixMode(MatrixMode.Modelview);
 				Common.ViewMatrix = Matrix4.LookAt(Common.CameraPosition.x, Common.CameraPosition.y,
 					Common.CameraPosition.z, 0, 0, 4, 0, 0, 1);

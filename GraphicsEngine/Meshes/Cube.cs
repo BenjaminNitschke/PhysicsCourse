@@ -88,7 +88,7 @@ namespace GraphicsEngine.Meshes
 
 		public void Draw()
 		{
-			Matrix4 renderMatrix = ToMatrix4(body.Orientation, body.Position);
+			Matrix4 renderMatrix = JitterDatatypes.ToMatrix4(body.Orientation, body.Position);
 			var modelView = renderMatrix * Common.ViewMatrix;
 			GL.LoadMatrix(ref modelView);
 			GL.Enable(EnableCap.Texture2D);
@@ -101,15 +101,6 @@ namespace GraphicsEngine.Meshes
 			GL.VertexPointer(3, VertexPointerType.Float, 0, vertices);
 			GL.DrawElements(PrimitiveType.Triangles, NumberOfIndices,
 				DrawElementsType.UnsignedShort, indices);
-		}
-
-		private static Matrix4 ToMatrix4(JMatrix m, JVector position)
-		{
-			return new Matrix4(
-				m.M11, m.M12, m.M13, 0,
-				m.M21, m.M22, m.M23, 0,
-				m.M31, m.M32, m.M33, 0,
-				position.X, position.Y, position.Z, 1);
 		}
 	}
 }
