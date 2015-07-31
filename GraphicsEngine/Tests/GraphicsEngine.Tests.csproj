@@ -30,7 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>GraphicsEngine.Tests.Program</StartupObject>
+    <StartupObject>GraphicsEngine.Tests.ParticlesPhysics3D</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FarseerPhysics">
@@ -52,8 +52,11 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Physics2D.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="BoxAndCirclePhysics2D.cs" />
+    <Compile Include="PyramidPhysics3D.cs" />
+    <Compile Include="BallsPhysics2D.cs" />
+    <Compile Include="JointsPhysics3D.cs" />
+    <Compile Include="ParticlesPhysics3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vector2DTests.cs" />
   </ItemGroup>

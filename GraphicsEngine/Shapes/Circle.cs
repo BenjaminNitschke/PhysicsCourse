@@ -11,7 +11,7 @@ namespace GraphicsEngine.Shapes
 	{
 		public Circle(Vector2D position, float radius)
 			: base(position, new Size(radius * 2, radius * 2),
-            BodyFactory.CreateCircle(Entities.world2D, radius, 1.0f, position, BodyType.Dynamic))
+        BodyFactory.CreateCircle(Entities.world2D, radius, 1.0f, position, BodyType.Dynamic))
 		{
 			this.radius = radius;
 			Entities.Register(this);

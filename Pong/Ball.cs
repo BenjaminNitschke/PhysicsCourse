@@ -18,17 +18,5 @@ namespace Pong
 			body.Restitution = 1;
 			body.Friction = 0.01f;
 		}
-
-		public Vector2D velocity
-		{
-			get { return (Vector2D)body.LinearVelocity; }
-			set
-			{
-				body.LinearVelocity = Vector2.Zero;
-				body.AngularVelocity = 0;
-				body.Inertia = 0;
-				body.ApplyLinearImpulse(value*0.01f);
-			}
-		}
 	}
 }

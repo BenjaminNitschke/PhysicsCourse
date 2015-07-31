@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
+using GraphicsEngine.Meshes;
 using GraphicsEngine.Physics2D;
 using GraphicsEngine.Shapes;
 using Jitter.Collision;
@@ -69,6 +70,16 @@ namespace GraphicsEngine
 
 		private static readonly List<PhysicsObject> PhysicsObjects = new List<PhysicsObject>();
 		private static readonly List<Drawable> Drawables = new List<Drawable>();
+		
+		public static void Unregister(object anything)
+		{
+			var physicsObject = anything as PhysicsObject;
+			if (physicsObject != null)
+				PhysicsObjects.Remove(physicsObject);
+			var drawable = anything as Drawable;
+			if (drawable != null)
+				Drawables.Remove(drawable);
+		}
 
 		public static void UpdateAll(float timeDeltaInSeconds)
 		{

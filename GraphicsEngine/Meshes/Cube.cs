@@ -86,6 +86,7 @@ namespace GraphicsEngine.Meshes
 		private const int NumberOfIndices = CubeFaces * 2 * 3;
 		private short[] indices;
 		private Vector2D[] uvs;
+		public float lifeTime;
 
 		public void Draw()
 		{
@@ -102,6 +103,12 @@ namespace GraphicsEngine.Meshes
 			GL.VertexPointer(3, VertexPointerType.Float, 0, vertices);
 			GL.DrawElements(PrimitiveType.Triangles, NumberOfIndices,
 				DrawElementsType.UnsignedShort, indices);
+		}
+
+		public void Dispose()
+		{
+			Entities.Unregister(this);
+			Entities.world3D.RemoveBody(body);
 		}
 	}
 }

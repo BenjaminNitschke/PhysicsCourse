@@ -1,15 +1,22 @@
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
 using GraphicsEngine.Datatypes;
 using GraphicsEngine.Physics2D;
 using OpenTK.Graphics.OpenGL;
 
 namespace GraphicsEngine.Shapes
 {
-    /*TODO
 	public class Box : PhysicsObject, Drawable
 	{
-		public Box(Vector2D position, Size size) : base(position, size)
+		public Box(Vector2D position, Size size)
+			: base(position, size,
+				BodyFactory.CreateRectangle(Entities.world2D, size.Width, size.Height, 1.0f, position,
+					BodyType.Dynamic))
 		{
 			Entities.Register(this);
+			body.IsStatic = false;
+			body.Restitution = 1;
+			body.Friction = 0.01f;
 		}
 
 		private float[] vertices;
@@ -22,9 +29,8 @@ namespace GraphicsEngine.Shapes
 			var halfHeight = size.Height / 2;
 			vertices = new[]
 			{
-				position.x - halfWidth, position.y + halfHeight, 0,
-				position.x - halfWidth, position.y - halfHeight, 0,
-				position.x + halfWidth, position.y - halfHeight, 0,
+				position.x - halfWidth, position.y + halfHeight, 0, position.x - halfWidth,
+				position.y - halfHeight, 0, position.x + halfWidth, position.y - halfHeight, 0,
 				position.x + halfWidth, position.y + halfHeight, 0
 			};
 			GL.EnableClientState(ArrayCap.VertexArray);
@@ -32,6 +38,5 @@ namespace GraphicsEngine.Shapes
 			GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedShort,
 				indices);
 		}
-    }
-     */
+	}
 }
