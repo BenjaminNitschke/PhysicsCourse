@@ -1,4 +1,5 @@
-﻿using GraphicsEngine.Datatypes;
+﻿using FarseerPhysics.Dynamics.Joints;
+using GraphicsEngine.Datatypes;
 using Jitter.Collision.Shapes;
 using Jitter.Dynamics;
 using Jitter.LinearMath;
@@ -73,7 +74,7 @@ namespace GraphicsEngine.Meshes
 				normals[i] = normal;
 		}
 
-		private RigidBody body;
+		public RigidBody body;
 		private Texture texture;
 		private Vector3D[] vertices;
 		private Vector3D[] normals;

@@ -1,17 +1,15 @@
-﻿using System.Linq;
-using System.Windows.Forms.VisualStyles;
+﻿using System.Collections.Generic;
 using GraphicsEngine.Datatypes;
 using GraphicsEngine.Meshes;
-using GraphicsEngine.Shapes;
-using Jitter.Collision;
 using Jitter.Dynamics;
+using Jitter.Dynamics.Joints;
 using Jitter.LinearMath;
-using OpenTK;
 
 namespace GraphicsEngine.Tests
 {
 	public class Program : GraphicsApp
 	{
+		private Cube[,] cubes;
 		public Program() : base("Physics3D Tests") {}
 
 		public static void Main()
@@ -23,13 +21,29 @@ namespace GraphicsEngine.Tests
 		{
 			base.Init();
 			var cubeTexture = new Texture("BoxDiffuse.jpg");
+			cubes = new Cube[PyramidHeight, PyramidHeight];
 			for (int z=0; z<PyramidHeight; z++)
-				for (int x=0; x<PyramidHeight-z; x++)
-					new Cube(cubeTexture, new Vector3D(
-						1.2f*(x-(PyramidHeight-z)/2.0f), 0, 1.5f*z+0.55f));
+				for (int x=0; x<PyramidHeight; x++)
+					cubes[x, z] = new Cube(cubeTexture, new Vector3D(
+						1.1f*(x-(PyramidHeight)/2.0f), 0, 1.1f*z+2.55f));
+			for (int z = 0; z < PyramidHeight; z++)
+				for (int x = 0; x < PyramidHeight - 1; x++)
+				{
+          var horizontalJoint = new PrismaticJoint(Entities.world3D,
+						cubes[x, z].body, cubes[x+1, z].body, 1.1f, 1.1f);
+					horizontalJoint.FixedAngleConstraint.Softness = 1;
+					horizontalJoint.Activate();
+					if (z < PyramidHeight - 1)
+					{
+						var verticalJoint = new PrismaticJoint(Entities.world3D, cubes[x, z].body,
+							cubes[x, z + 1].body, 1.1f, 1.1f);
+						verticalJoint.FixedAngleConstraint.Softness = 1;
+						verticalJoint.Activate();
+					}
+				}
 		}
 
-		private const int PyramidHeight = 24;
+		private const int PyramidHeight = 12;
 
 		protected override void Update()
 		{
@@ -54,7 +68,7 @@ namespace GraphicsEngine.Tests
 				Entities.world3D.CollisionSystem.Raycast(JitterDatatypes.ToJVector(Common.CameraPosition),
 					rayDirection, null, out body, out normal, out fraction);
 				if (body != null && !body.IsStatic)
-					body.ApplyImpulse(rayDirection * 20);
+					body.ApplyImpulse(rayDirection * 200);
 			}
     }
 	}

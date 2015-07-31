@@ -31,10 +31,6 @@ namespace Pong
 			Entities.world2D.Gravity /= 10.0f;
 			Entities.Register(new Sprite(new Texture("Background.jpg"), new Size(2.0f, 1.4f)));
 			ball = new Ball(new Sprite(new Texture("Ball.png"), Constants.BallSize));
-			ball = new Ball(new Sprite(new Texture("Ball.png"), Constants.BallSize));
-			ball = new Ball(new Sprite(new Texture("Ball.png"), Constants.BallSize));
-			ball = new Ball(new Sprite(new Texture("Ball.png"), Constants.BallSize));
-			ball = new Ball(new Sprite(new Texture("Ball.png"), Constants.BallSize));
 			ResetBall();
 			var paddleTexture = new Texture("Paddle.png");
 			leftPaddle = new Paddle(new Sprite(paddleTexture, Constants.PaddleSize),

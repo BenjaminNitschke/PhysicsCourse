@@ -20,7 +20,7 @@ namespace GraphicsEngine
 		public const float FieldOfView = PI / 2;
 		public const float NearPlane = 0.1f;
 		public const float FarPlane = 100.0f;
-		public static readonly Vector3D CameraPosition = new Vector3D(0, -6, 4);
+		public static readonly Vector3D CameraPosition = new Vector3D(0, -12, 4);
 		public static readonly Vector3D LightPosition = new Vector3D(0.3f, 0.2f, 1);
 		public static Matrix4 ViewMatrix;
 		public static Matrix4 ProjectionMatrix;
