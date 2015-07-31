@@ -37,6 +37,10 @@ namespace GraphicsEngine
 			rightWall.IsStatic = true;
 			rightWall.Restitution = 1;
 			rightWall.Friction = 0.01f;
+			var roof = BodyFactory.CreateRectangle(world2D, 10, 0.1f, 1f, -groundPosition);
+			roof.IsStatic = true;
+			roof.Restitution = 1;
+			roof.Friction = 0.01f;
 		}
 
 		public static World world2D;

@@ -28,9 +28,14 @@ namespace Pong
 		protected override void Init()
 		{
 			base.Init();
+			Entities.world2D.Gravity /= 10.0f;
 			Entities.Register(new Sprite(new Texture("Background.jpg"), new Size(2.0f, 1.4f)));
 			ball = new Ball(new Sprite(new Texture("Ball.png"), Constants.BallSize));
-			//TODO: ball.velocity = Constants.DefaultBallVelocity;
+			ball = new Ball(new Sprite(new Texture("Ball.png"), Constants.BallSize));
+			ball = new Ball(new Sprite(new Texture("Ball.png"), Constants.BallSize));
+			ball = new Ball(new Sprite(new Texture("Ball.png"), Constants.BallSize));
+			ball = new Ball(new Sprite(new Texture("Ball.png"), Constants.BallSize));
+			ResetBall();
 			var paddleTexture = new Texture("Paddle.png");
 			leftPaddle = new Paddle(new Sprite(paddleTexture, Constants.PaddleSize),
 				new Vector2D(Constants.LeftPaddleX, 0));
@@ -45,33 +50,27 @@ namespace Pong
 		private void HandleInput(float timeDeltaInSeconds)
 		{
 			// AI
-			if (leftPaddle.position.y < ball.position.y + Constants.PaddleSpeed * timeDeltaInSeconds)
-				leftPaddle.position.y += Constants.PaddleSpeed * timeDeltaInSeconds;
-			else if (leftPaddle.position.y > ball.position.y - Constants.PaddleSpeed * timeDeltaInSeconds)
-				leftPaddle.position.y -= Constants.PaddleSpeed * timeDeltaInSeconds;
+			if (leftPaddle.position.y < ball.position.y - 2 * Constants.PaddleSpeed * timeDeltaInSeconds)
+				leftPaddle.IncreasePositionY(Constants.PaddleSpeed * timeDeltaInSeconds);
+			else if (leftPaddle.position.y > ball.position.y + 2 * Constants.PaddleSpeed * timeDeltaInSeconds)
+				leftPaddle.IncreasePositionY(-Constants.PaddleSpeed * timeDeltaInSeconds);
 			// Human player
 			if (form.DownPressed && rightPaddle.position.y > -(0.55f - rightPaddle.size.Height/2))
-				rightPaddle.position.y -= Constants.PaddleSpeed * timeDeltaInSeconds;
+				rightPaddle.IncreasePositionY(-Constants.PaddleSpeed * timeDeltaInSeconds);
 			if (form.UpPressed && rightPaddle.position.y < 0.55f - rightPaddle.size.Height / 2)
-				rightPaddle.position.y += Constants.PaddleSpeed * timeDeltaInSeconds;
+				rightPaddle.IncreasePositionY(Constants.PaddleSpeed * timeDeltaInSeconds);
 		}
 		
 		private void HandleBall(float timeDeltaInSeconds)
 		{
-			/*TODO:
-			if (ball.position.y < -0.55f || ball.position.y > 0.55f)
-				ball.velocity.y = -ball.velocity.y;
-			if (ball.IsColliding(rightPaddle))
-				ball.velocity.x = -Math.Abs(ball.velocity.x);
-			if (ball.IsColliding(leftPaddle))
-				ball.velocity.x = Math.Abs(ball.velocity.x);
-			*/
-			if (ball.position.x < -1)
+			if (Math.Abs(ball.velocity.x) < 0.01f)
+				ResetBall();
+			if (ball.position.x < -0.9f)
 			{
 				rightPoints++;
 				ResetBall();
 			}
-			else if (ball.position.x > 1)
+			else if (ball.position.x > 0.9f)
 			{
 				leftPoints++;
 				ResetBall();
@@ -86,8 +85,8 @@ namespace Pong
 			title = "Pong Score: " + leftPoints + " - " + rightPoints;
 			ball.position = Vector2D.Zero;
 			var random = new Random((int)DateTime.Now.Ticks);
-			//TODO: ball.velocity = Constants.DefaultBallVelocity *
-			//	new Vector2D(random.Next(2) == 0 ? -1 : +1, random.Next(2) == 0 ? -1 : +1);
+			ball.velocity = Constants.DefaultBallVelocity *
+				new Vector2D(random.Next(2) == 0 ? -1 : +1, random.Next(2) == 0 ? -1 : +1);
 		}
 	}
 }

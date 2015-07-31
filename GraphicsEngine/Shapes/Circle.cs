@@ -15,9 +15,9 @@ namespace GraphicsEngine.Shapes
 		{
 			this.radius = radius;
 			Entities.Register(this);
-            body.IsStatic = false;
-            body.Restitution = 1;
-            body.Friction = 0.01f;
+			body.IsStatic = false;
+			body.Restitution = 1;
+			body.Friction = 0.01f;
 		}
 
 		private readonly float radius;
