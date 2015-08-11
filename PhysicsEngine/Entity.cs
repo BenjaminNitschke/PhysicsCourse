@@ -15,11 +15,13 @@ namespace PhysicsEngine
 			this.mass = mass;
 			acceleration = World.Gravity2D;
 			force = mass * acceleration;
+			frictionOnCollision = 0.1f;
 		}
 
 		protected Vector2D position;
 		protected readonly Vector2D size;
 		protected readonly float mass;
+		public float frictionOnCollision;
 
 		public void Update(float deltaTime)
 		{
@@ -30,6 +32,25 @@ namespace PhysicsEngine
 		protected Vector2D force;
 		protected Vector2D acceleration;
 
+		public void HandleGroundAndSideWallsCollision()
+		{
+			if (IsCollidingWithGround)
+			{
+				position.y = World.GroundHeight + size.y / 2;
+				velocity.y = -velocity.y * (1 - frictionOnCollision);
+			}
+			if (IsCollidingWithLeftSide)
+			{
+				position.x = LeftSide + size.x / 2;
+				velocity.x = -velocity.x * (1 - frictionOnCollision);
+			}
+			if (IsCollidingWithRightSide)
+			{
+				position.x = RightSide - size.x / 2;
+				velocity.x = -velocity.x * (1 - frictionOnCollision);
+			}
+		}
+
 		public bool IsCollidingWithGround
 		{
 			get
@@ -38,33 +59,47 @@ namespace PhysicsEngine
 			}
 		}
 
-		public void HandleGroundCollision()
+		public bool IsCollidingWithLeftSide
 		{
-			position.y = World.GroundHeight + size.y / 2;
-			velocity.y = -velocity.y;
+			get
+			{
+				return position.x - size.x / 2 < LeftSide;
+			}
 		}
+		private const float LeftSide = -0.5f;
+
+		public bool IsCollidingWithRightSide
+		{
+			get
+			{
+				return position.x + size.x / 2 > RightSide;
+			}
+		}
+		private const float RightSide = 0.5f;
 
 		public void HandleCollision(PhysicsUpdatable other)
 		{
 			var otherEntity = (Entity)other;
-			if ((position - otherEntity.position).Length <
-				size.Length / 2 + otherEntity.size.Length / 2)
+			if (IsCollidingWith(otherEntity))
 			{
 				var distanceVector = position - otherEntity.position;
-				var normal = distanceVector.Rotate(90); // 1, 0
-				velocity.y = -velocity.y;
-				otherEntity.velocity.y = -otherEntity.velocity.y;
-				//otherEntity.f
-				//Vector2D otherForce = otherEntity.mass * otherEntity.acceleration;
-				//Handle collision forces
-				//velocity = new Vector2D();
-				//otherEntity.velocity = new Vector2D();
+				var reflection = velocity.MirrorAtNormal(distanceVector);
+				var otherReflection = otherEntity.velocity.MirrorAtNormal(distanceVector);
+				velocity = reflection;
+				otherEntity.velocity = otherReflection;
 			}
 		}
 
+		private bool IsCollidingWith(Entity other)
+		{
+			return position.x + size.x / 2 > other.position.x - other.size.x / 2 &&
+				position.x - size.x / 2 < other.position.x + other.size.x / 2 &&
+				position.y + size.y / 2 > other.position.y - other.size.y / 2 &&
+				position.y - size.y / 2 < other.position.y + other.size.y / 2;
+		}
+
 		private Vector2D velocity = new Vector2D();
-		//Mass
-		//Force, Acceleration
+
 		public abstract void Draw();
 	}
 }

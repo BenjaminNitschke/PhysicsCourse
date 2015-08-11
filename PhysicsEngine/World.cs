@@ -23,11 +23,10 @@ namespace PhysicsEngine
 
 		public static void Update(float deltaTime)
 		{
-			foreach (var entity in updateables)
+      foreach (var entity in updateables)
 				entity.Update(deltaTime);
 			foreach (var entity in updateables)
-				if (entity.IsCollidingWithGround)
-					entity.HandleGroundCollision();
+				entity.HandleGroundAndSideWallsCollision();
 			for (var i = 0; i < updateables.Count; i++)
 				for (var j = i + 1; j < updateables.Count; j++)
 					updateables[i].HandleCollision(updateables[j]);

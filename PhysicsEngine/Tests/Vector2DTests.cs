@@ -52,6 +52,30 @@ namespace PhysicsEngine.Tests
 		}
 
 		[Test]
+		public void DotProduct()
+		{
+			Vector2D a = new Vector2D(1, 0);
+			Vector2D b = new Vector2D(0, 1);
+			Assert.That(Vector2D.DotProduct(a, b), Is.EqualTo(0));
+			Assert.That(Vector2D.DotProduct(a, a), Is.EqualTo(1));
+		}
+
+		[Test]
+		public void Normalize()
+		{
+			Assert.That(Vector2D.Normalize(new Vector2D(10, 0)),
+				Is.EqualTo(new Vector2D(1, 0)));
+		}
+
+		[Test]
+		public void MirrorAtNormal()
+		{
+			Vector2D vector = new Vector2D(1, 0);
+			Vector2D normal = new Vector2D(1, -1);
+			Assert.That(vector.MirrorAtNormal(normal), Is.EqualTo(new Vector2D(0, 1)));
+		}
+
+		[Test]
 		public void Vector2DToString()
 		{
 			Assert.That(new Vector2D(3, 4).ToString(), Is.EqualTo("3, 4"));

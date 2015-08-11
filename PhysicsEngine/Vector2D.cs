@@ -84,6 +84,22 @@ namespace PhysicsEngine
 		}
 
 		public float Length { get { return (float)Math.Sqrt(x*x+y*y); } }
+		
+		public Vector2D MirrorAtNormal(Vector2D normal)
+		{
+			normal = Normalize(normal);
+			return this - 2 * DotProduct(this, normal) * normal;
+		}
+
+		public static float DotProduct(Vector2D a, Vector2D b)
+		{
+			return a.x * b.x + a.y * b.y;
+		}
+
+		public static Vector2D Normalize(Vector2D vector)
+		{
+			return vector / vector.Length;
+		}
 
 		public override string ToString()
 		{

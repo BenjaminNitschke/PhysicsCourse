@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -24,9 +25,10 @@ namespace PhysicsEngine
 
 		private static void CreateRectangles()
 		{
-			new Rectangle(new Vector2D(0, 0), new Vector2D(0.2f, 0.2f), Color4.Yellow, 40);
-			for (float x = -0.5f; x <= -0.1f; x += 0.1f)
-				new Rectangle(new Vector2D(x, 0.3f), new Vector2D(0.05f, 0.05f), Color4.Red, 2.5f);
+			for (float y = 0.3f; y >= 0.0f; y -= 0.1f)
+				for (float x = -0.475f; x <= 0.475f; x += 0.03f)
+					new Rectangle(new Vector2D(x, y), new Vector2D(0.025f, 0.025f), Color4.White, 2.5f);
+			new Rectangle(new Vector2D(0, 0.0f), new Vector2D(0.075f, 0.075f), Color4.Orange, 2.5f);
 		}
 
 		private static void Resize(object sender, EventArgs e)
@@ -44,7 +46,12 @@ namespace PhysicsEngine
 
 		private static void Update(object sender, FrameEventArgs e)
 		{
-			World.Update((float)e.Time);
+			physicsTimeAccumulator += (float)e.Time;
+			while (physicsTimeAccumulator > PhysicsTimeStep)
+			{
+				physicsTimeAccumulator -= PhysicsTimeStep;
+				World.Update(PhysicsTimeStep);
+			}
 			if (window.Keyboard[Key.Escape])
 				window.Exit();
 			titleUpdateTime += (float)e.Time;
@@ -55,6 +62,8 @@ namespace PhysicsEngine
 			}
 		}
 
+		private static float physicsTimeAccumulator = 0;
+    private const float PhysicsTimeStep = 1 / 60.0f;
 		private static float titleUpdateTime;
 
 		private static void Draw(object sender, FrameEventArgs frameEventArgs)
