@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
-using Microsoft.Xna.Framework;
+using OpenTK;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace PhysicsEngine
 {
@@ -35,6 +36,7 @@ namespace PhysicsEngine
 
 		public static readonly List<Drawable> drawables = new List<Drawable>();
 		public static readonly List<PhysicsUpdatable> updateables = new List<PhysicsUpdatable>();
+		public static Matrix4 cameraMatrix;
 
 		public static void Update(float deltaTime)
 		{

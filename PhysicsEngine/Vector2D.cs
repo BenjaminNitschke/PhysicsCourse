@@ -89,7 +89,7 @@ namespace PhysicsEngine
 			return new Vector2D(x * cos - y * sin, y * cos + x * sin);
 		}
 
-		private static float DegreesToRadians(float degrees)
+		public static float DegreesToRadians(float degrees)
 		{
 			return degrees * (float)Math.PI / 180.0f;
 		}
