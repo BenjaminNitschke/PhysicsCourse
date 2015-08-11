@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using OpenTK;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace PhysicsEngine
 {
@@ -69,6 +70,16 @@ namespace PhysicsEngine
 		public static bool operator !=(Vector2D a, Vector2D b)
 		{
 			return !a.Equals(b);
+		}
+
+		public static implicit operator Vector2(Vector2D vector)
+		{
+			return new Vector2(vector.x, vector.y);
+		}
+
+		public static explicit operator Vector2D(Vector2 vector)
+		{
+			return new Vector2D(vector.X, vector.Y);
 		}
 
 		public Vector2D Rotate(float degrees)

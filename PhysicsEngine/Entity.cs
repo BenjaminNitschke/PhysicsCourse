@@ -1,4 +1,8 @@
 using System;
+using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
+using Microsoft.Xna.Framework;
 
 namespace PhysicsEngine
 {
@@ -10,96 +14,35 @@ namespace PhysicsEngine
 		protected Entity(Vector2D position, Vector2D size, float mass)
 		{
 			World.Add(this);
-			this.position = position;
 			this.size = size;
-			this.mass = mass;
-			acceleration = World.Gravity2D;
-			force = mass * acceleration;
-			frictionOnCollision = 0.1f;
+			body = BodyFactory.CreateRectangle(World.world2D,
+				size.x * ToPhysicsSize, size.y * ToPhysicsSize, 1,
+				position * ToPhysicsSize);
+			body.BodyType = BodyType.Dynamic;
+			body.Mass = mass;
+			body.Friction = 0.2f;
+			body.Restitution = 0.98f;
+			body.ApplyLinearImpulse(new Vector2(0.1f, 0.5f));
 		}
 
-		protected Vector2D position;
+		internal const float ToPhysicsSize = 10.0f;
+		protected Vector2D position
+		{
+			get
+			{
+				return (Vector2D)body.Position / ToPhysicsSize;
+			}
+		}
+		protected float rotation
+		{
+			get
+			{
+				return body.Rotation * 180 / (float)Math.PI;
+			}
+		}
 		protected readonly Vector2D size;
-		protected readonly float mass;
-		public float frictionOnCollision;
-
-		public void Update(float deltaTime)
-		{
-			velocity += (force / mass) * deltaTime; //m/s*s
-			position += velocity * deltaTime; //m/s
-		}
-
-		protected Vector2D force;
-		protected Vector2D acceleration;
-
-		public void HandleGroundAndSideWallsCollision()
-		{
-			if (IsCollidingWithGround)
-			{
-				position.y = World.GroundHeight + size.y / 2;
-				velocity.y = -velocity.y * (1 - frictionOnCollision);
-			}
-			if (IsCollidingWithLeftSide)
-			{
-				position.x = LeftSide + size.x / 2;
-				velocity.x = -velocity.x * (1 - frictionOnCollision);
-			}
-			if (IsCollidingWithRightSide)
-			{
-				position.x = RightSide - size.x / 2;
-				velocity.x = -velocity.x * (1 - frictionOnCollision);
-			}
-		}
-
-		public bool IsCollidingWithGround
-		{
-			get
-			{
-				return position.y - size.y / 2 < World.GroundHeight;
-			}
-		}
-
-		public bool IsCollidingWithLeftSide
-		{
-			get
-			{
-				return position.x - size.x / 2 < LeftSide;
-			}
-		}
-		private const float LeftSide = -0.5f;
-
-		public bool IsCollidingWithRightSide
-		{
-			get
-			{
-				return position.x + size.x / 2 > RightSide;
-			}
-		}
-		private const float RightSide = 0.5f;
-
-		public void HandleCollision(PhysicsUpdatable other)
-		{
-			var otherEntity = (Entity)other;
-			if (IsCollidingWith(otherEntity))
-			{
-				var distanceVector = position - otherEntity.position;
-				var reflection = velocity.MirrorAtNormal(distanceVector);
-				var otherReflection = otherEntity.velocity.MirrorAtNormal(distanceVector);
-				velocity = reflection;
-				otherEntity.velocity = otherReflection;
-			}
-		}
-
-		private bool IsCollidingWith(Entity other)
-		{
-			return position.x + size.x / 2 > other.position.x - other.size.x / 2 &&
-				position.x - size.x / 2 < other.position.x + other.size.x / 2 &&
-				position.y + size.y / 2 > other.position.y - other.size.y / 2 &&
-				position.y - size.y / 2 < other.position.y + other.size.y / 2;
-		}
-
-		private Vector2D velocity = new Vector2D();
-
+		private readonly Body body;
+		
 		public abstract void Draw();
 	}
 }

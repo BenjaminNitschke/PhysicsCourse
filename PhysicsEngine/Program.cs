@@ -13,7 +13,7 @@ namespace PhysicsEngine
 	{
 		private static void Main()
 		{
-			using (window = new GameWindow(640, 360, GraphicsMode.Default, "PhysicsEngine"))
+			using (window = new GameWindow(1024, 600, GraphicsMode.Default, "PhysicsEngine"))
 			{
 				CreateRectangles();
 				window.Resize += Resize;
@@ -27,8 +27,8 @@ namespace PhysicsEngine
 		{
 			for (float y = 0.3f; y >= 0.0f; y -= 0.1f)
 				for (float x = -0.475f; x <= 0.475f; x += 0.03f)
-					new Rectangle(new Vector2D(x, y), new Vector2D(0.025f, 0.025f), Color4.White, 2.5f);
-			new Rectangle(new Vector2D(0, 0.0f), new Vector2D(0.075f, 0.075f), Color4.Orange, 2.5f);
+					new Rectangle(new Vector2D(x, y), new Vector2D(0.025f, 0.025f), Color4.White, 0.1f);
+			new Rectangle(new Vector2D(0, 0.0f), new Vector2D(0.075f, 0.075f), Color4.Orange, 0.3f);
 		}
 
 		private static void Resize(object sender, EventArgs e)

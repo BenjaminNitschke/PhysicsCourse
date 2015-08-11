@@ -1,11 +1,26 @@
 using System.Collections.Generic;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
+using Microsoft.Xna.Framework;
 
 namespace PhysicsEngine
 {
 	public static class World
 	{
-		public static readonly Vector2D Gravity2D = new Vector2D(0, -9.81f); //m/s2
-		public static float aspectRatio;
+		static World()
+		{
+			world2D = new FarseerPhysics.Dynamics.World(Gravity2D);
+			var ground = BodyFactory.CreateRectangle(world2D, 100, 1f, 10, new Vector2(0, GroundHeight-0.05f)*Entity.ToPhysicsSize);
+			ground.BodyType = BodyType.Static;
+			var leftSide = BodyFactory.CreateRectangle(world2D, 1f, 10, 10, new Vector2(-0.55f, 0) * Entity.ToPhysicsSize);
+			leftSide.BodyType = BodyType.Static;
+			var rightSide = BodyFactory.CreateRectangle(world2D, 1f, 10, 10, new Vector2(0.55f, 0) * Entity.ToPhysicsSize);
+			rightSide.BodyType = BodyType.Static;
+		}
+
+		internal static FarseerPhysics.Dynamics.World world2D;
+    public static readonly Vector2D Gravity2D = new Vector2D(0, -9.81f); //m/s2
+		public static float aspectRatio = 600.0f / 1024;
 		public static float GroundHeight { get { return -aspectRatio / 2.0f; } }
 
 		public static void Add(object anyDrawableOrUpdateable)
@@ -23,13 +38,7 @@ namespace PhysicsEngine
 
 		public static void Update(float deltaTime)
 		{
-      foreach (var entity in updateables)
-				entity.Update(deltaTime);
-			foreach (var entity in updateables)
-				entity.HandleGroundAndSideWallsCollision();
-			for (var i = 0; i < updateables.Count; i++)
-				for (var j = i + 1; j < updateables.Count; j++)
-					updateables[i].HandleCollision(updateables[j]);
+			world2D.Step(deltaTime);
 		}
 
 		public static void Draw()

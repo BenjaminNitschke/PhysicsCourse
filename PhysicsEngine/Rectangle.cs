@@ -17,10 +17,14 @@ namespace PhysicsEngine
 		{
 			GL.Begin(PrimitiveType.Quads);
 			GL.Color4(color);
-			GL.Vertex2(position.x - size.x / 2, position.y - size.y / 2);
-			GL.Vertex2(position.x - size.x / 2, position.y + size.y / 2);
-			GL.Vertex2(position.x + size.x / 2, position.y + size.y / 2);
-			GL.Vertex2(position.x + size.x / 2, position.y - size.y / 2);
+			var leftTop = position + new Vector2D(-size.x / 2, -size.y / 2).Rotate(rotation);
+			GL.Vertex2(leftTop.x, leftTop.y);
+			var leftBottom = position + new Vector2D(-size.x / 2, size.y / 2).Rotate(rotation);
+			GL.Vertex2(leftBottom.x , leftBottom.y);
+			var rightBottom = position + new Vector2D(size.x / 2, size.y / 2).Rotate(rotation);
+			GL.Vertex2(rightBottom.x, rightBottom.y);
+			var rightTop = position + new Vector2D(size.x / 2, -size.y / 2).Rotate(rotation);
+			GL.Vertex2(rightTop.x, rightTop.y);
 			GL.End();
 		}
 	}
