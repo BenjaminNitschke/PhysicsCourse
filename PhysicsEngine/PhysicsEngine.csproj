@@ -47,17 +47,18 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cube.cs" />
+    <Compile Include="Physics3D\Entity3D.cs" />
+    <Compile Include="Physics3D\Cube.cs" />
     <Compile Include="Drawable.cs" />
-    <Compile Include="Entity.cs" />
+    <Compile Include="Physics2D\Entity2D.cs" />
     <Compile Include="PhysicsUpdatable.cs" />
-    <Compile Include="Program2D.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Physics2D\Program2D.cs" />
+    <Compile Include="Physics3D\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rectangle.cs" />
+    <Compile Include="Physics2D\Rectangle.cs" />
     <Compile Include="Texture.cs" />
-    <Compile Include="Vector2D.cs" />
-    <Compile Include="Vector3D.cs" />
+    <Compile Include="Physics2D\Vector2D.cs" />
+    <Compile Include="Physics3D\Vector3D.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>

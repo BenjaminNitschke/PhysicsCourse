@@ -54,6 +54,20 @@ namespace PhysicsEngine
 			}
 			if (window.Keyboard[Key.Escape])
 				window.Exit();
+			if (window.Mouse[MouseButton.Left])
+			{
+				if (!wasMousePressed)
+				{
+					wasMousePressed = true;
+					var entity = World.GetEntity2DAt(new Vector2D(
+						-0.5f + window.Mouse.X/(float)window.Width,
+						World.aspectRatio / 2 - window.Mouse.Y/(float)window.Width));
+					if (entity != null)
+						entity.AddForce(new Vector2D(0.5f, 3));
+				}
+			}
+			else
+				wasMousePressed = false;
 			titleUpdateTime += (float)e.Time;
       if (titleUpdateTime > 1.0f)
 			{
@@ -62,7 +76,8 @@ namespace PhysicsEngine
 			}
 		}
 
-		private static float physicsTimeAccumulator = 0;
+		private static bool wasMousePressed;
+    private static float physicsTimeAccumulator = 0;
     private const float PhysicsTimeStep = 1 / 60.0f;
 		private static float titleUpdateTime;
 

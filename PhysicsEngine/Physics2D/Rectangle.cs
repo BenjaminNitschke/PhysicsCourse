@@ -3,7 +3,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace PhysicsEngine
 {
-	public class Rectangle : Entity
+	public class Rectangle : Entity2D
 	{
 		public Rectangle(Vector2D position, Vector2D size, Color4 color, float mass)
 			: base(position, size, mass)

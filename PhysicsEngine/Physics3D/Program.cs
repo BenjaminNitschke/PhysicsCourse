@@ -6,6 +6,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using PhysicsEngine.Physics3D;
 
 namespace PhysicsEngine
 {
@@ -96,7 +97,8 @@ namespace PhysicsEngine
 					startClickX = window.Mouse.X;
 					startClickY = window.Mouse.Y;
 				}
-				else
+				else if (window.Mouse.X - startClickX != 0 ||
+					window.Mouse.Y - startClickY != 0)
 				{
 					World.cameraMatrix = Matrix4.LookAt(new Vector3(
 						-10.0f + 30.0f*(window.Mouse.X - startClickX)/window.Width,
@@ -104,6 +106,15 @@ namespace PhysicsEngine
 						new Vector3(0, 0, 5.5f),
 						Vector3.UnitZ);
         }
+				else
+				{
+					Vector3D direction;
+					var entity = World.GetEntity3DAt(new Vector2D(
+						-1f + 2 * (window.Mouse.X / (float)window.Width),
+						-1f + 2 * (window.Mouse.Y / (float)window.Height)), out direction);
+					if (entity != null)
+						entity.AddForce(direction * 100);
+				}
 			}
 			else
 			{

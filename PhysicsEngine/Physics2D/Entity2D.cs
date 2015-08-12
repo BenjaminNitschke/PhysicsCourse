@@ -1,5 +1,4 @@
 using System;
-using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
@@ -9,9 +8,9 @@ namespace PhysicsEngine
 	/// <summary>
 	/// Provides common Physics Properties and the Update method for World
 	/// </summary>
-	public abstract class Entity : Drawable, PhysicsUpdatable
+	public abstract class Entity2D : Drawable, PhysicsUpdatable
 	{
-		protected Entity(Vector2D position, Vector2D size, float mass)
+		protected Entity2D(Vector2D position, Vector2D size, float mass)
 		{
 			World.Add(this);
 			this.size = size;
@@ -44,5 +43,19 @@ namespace PhysicsEngine
 		private readonly Body body;
 		
 		public abstract void Draw();
+
+		public bool Contains(Vector2D checkPosition)
+		{
+			// Box check (AABB)
+			return position.x + size.x / 2 > checkPosition.x &&
+				position.x - size.x / 2 < checkPosition.x &&
+				position.y + size.y / 2 > checkPosition.y &&
+				position.y - size.y / 2 < checkPosition.y;
+		}
+
+		public void AddForce(Vector2D addForce)
+		{
+			body.ApplyLinearImpulse(addForce);
+		}
 	}
 }
