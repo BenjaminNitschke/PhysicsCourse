@@ -1,4 +1,7 @@
-﻿using OpenTK;
+﻿using Jitter.Collision.Shapes;
+using Jitter.Dynamics;
+using Jitter.LinearMath;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace PhysicsEngine.Physics3D
@@ -9,6 +12,10 @@ namespace PhysicsEngine.Physics3D
 			: base(position, new Vector3D(1, 1, 1), 1)
 		{
 			this.texture = texture;
+			var shape = new BoxShape(1, 1, 1);
+			body = new RigidBody(shape);
+			body.Position = JitterMath.ToJVector(position);
+			World.world3D.AddBody(body);
 			World.Add(this);
 			// Create 3D Cube from Vertices and Indices
 			vertices = new Vector3D[NumberOfVertices] // 6*4 = 24 edge points
@@ -78,16 +85,9 @@ namespace PhysicsEngine.Physics3D
 
 		public override void Draw()
 		{
-			//Matrix4 renderMatrix = JitterDatatypes.ToMatrix4(body.Orientation, body.Position);
-			//var modelView = renderMatrix * Common.ViewMatrix;
-			//GL.LoadMatrix(ref modelView);
-			
-			//orientation *= new Quaternion(0.001f, 0.001f, 0.001f, 1);
-			Matrix4 renderMatrix = Matrix4.CreateFromQuaternion(orientation) *
-				Matrix4.CreateTranslation(position);
+			Matrix4 renderMatrix = JitterMath.ToMatrix4(body.Orientation, body.Position);
 			Matrix4 modelView = renderMatrix * World.cameraMatrix;
       GL.LoadMatrix(ref modelView);
-
 			GL.Enable(EnableCap.Texture2D);
 			GL.BindTexture(TextureTarget.Texture2D, texture.Handle);
 			GL.EnableClientState(ArrayCap.NormalArray);

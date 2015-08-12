@@ -39,6 +39,10 @@
       <HintPath>packages\FarseerPhysics.3.5.0\lib\NET40\FarseerPhysics.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Jitter, Version=0.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Jitter.0.1.7.0\lib\NET40\Jitter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
       <Private>True</Private>
@@ -51,6 +55,7 @@
     <Compile Include="Physics3D\Cube.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Physics2D\Entity2D.cs" />
+    <Compile Include="Physics3D\JitterMath.cs" />
     <Compile Include="PhysicsUpdatable.cs" />
     <Compile Include="Physics2D\Program2D.cs" />
     <Compile Include="Physics3D\Program.cs" />

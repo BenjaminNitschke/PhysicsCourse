@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
+using Jitter.LinearMath;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -34,8 +35,8 @@ namespace PhysicsEngine
 		private static void InitializeCamera()
 		{
 			GL.MatrixMode(MatrixMode.Modelview);
-			World.cameraPosition = new Vector3D(0, -5, 0);//12, 4);
-			World.cameraTarget = new Vector3D(0, 0, 0);//5.5f
+			World.cameraPosition = new Vector3D(0, -12, 4);
+			World.cameraTarget = new Vector3D(0, 0, 5.5f);
 			World.cameraMatrix = Matrix4.LookAt(World.cameraPosition, World.cameraTarget, Vector3.UnitZ);
 			GL.LoadMatrix(ref World.cameraMatrix);
 			GL.Enable(EnableCap.DepthTest);
@@ -57,10 +58,10 @@ namespace PhysicsEngine
 			for (int z = 0; z < PyramidHeight; z++)
 				for (int x = 0; x < PyramidHeight - z; x++)
 					new Cube(cubeTexture, new Vector3D(
-						1.1f * (x - (PyramidHeight - z) / 2.0f), 0, 1.2f * z + 0.55f));
+						1.1f * (x - (PyramidHeight - z) / 2.0f), 0, 1.25f * z + 0.55f));
 		}
 
-		private const int PyramidHeight = 12;
+		private const int PyramidHeight = 16;
 
 		private static void Resize(object sender, EventArgs e)
 		{
@@ -115,12 +116,12 @@ namespace PhysicsEngine
 			}
 			if (window.Mouse[MouseButton.Left])
 			{
-				Vector3D direction;
+				JVector direction;
 				var entity = World.GetEntity3DAt(new Vector2D(
 					-1f + 2 * (window.Mouse.X / (float)window.Width),
 					-1f + 2 * (window.Mouse.Y / (float)window.Height)), out direction);
 				if (entity != null)
-					entity.AddForce(direction * 1);
+					entity.ApplyImpulse(direction * 10);
 			}
 
 			titleUpdateTime += (float)e.Time;

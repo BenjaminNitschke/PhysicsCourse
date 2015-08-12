@@ -1,3 +1,6 @@
+using FarseerPhysics.Dynamics;
+using Jitter.Dynamics;
+using Jitter.LinearMath;
 using OpenTK;
 
 namespace PhysicsEngine.Physics3D
@@ -10,74 +13,31 @@ namespace PhysicsEngine.Physics3D
 		protected Entity3D(Vector3D position, Vector3D size, float mass)
 		{
 			World.Add(this);
-			this.position = position;
 			this.size = size;
 		}
 
 		protected readonly Vector3D size;
-		protected Vector3D position;
-		protected Quaternion orientation = Quaternion.Identity;
-
-		public void Update(float deltaTime)
+		protected RigidBody body;
+		protected Vector3D position
 		{
-			velocity += World.Gravity3D * deltaTime; //m/s*s
-			position += velocity * deltaTime; //m/s
-
-			if (position.z - size.z / 2 < 0)
+			get
 			{
-				position.z = size.z / 2;
-				velocity.z = -velocity.z * (1- FrictionOnCollision);
+				return JitterMath.ToVector3D(body.Position);
 			}
-    }
-
-		public void HandleCollision(Entity3D other)
-		{
-			if (IsCollidingWith(other))
-			{
-				//Handle collision
-				if (position.z > other.position.z - 0.1f &&
-					position.z < other.position.z + 0.1f)
-				{
-					// Side by side
-				}
-				else if (position.z > other.position.z)
-				{
-					// I am on top
-					position.z = other.position.z + size.z;
-					velocity.z = -velocity.z * (1 - FrictionOnCollision);
-					other.velocity.z = 0;
-				}
-				else
-				{
-					// Other is on top
-					other.position.z = position.z + size.z;
-					other.velocity.z = -velocity.z * (1 - FrictionOnCollision);
-					velocity.z = 0;
-				}
-			}
-    }
-
-		private bool IsCollidingWith(Entity3D other)
-		{
-			// Box check (AABB)
-			return position.x + size.x / 2 > other.position.x - other.size.x / 2 &&
-				position.x - size.x / 2 < other.position.x + other.size.x / 2 &&
-				position.y + size.y / 2 > other.position.y - other.size.y / 2 &&
-				position.y - size.y / 2 < other.position.y + other.size.y / 2 &&
-				position.z + size.z / 2 > other.position.z - other.size.z / 2 &&
-				position.z - size.z / 2 < other.position.z + other.size.z / 2;
-			//Sphere check:
-			// return (position - other.position).Length < size.Length / 2 + other.size.Length / 2;
 		}
-
-		private const float FrictionOnCollision = 0.2f;
-		protected Vector3D velocity;
-
+		protected JMatrix orientation
+		{
+			get
+			{
+				return body.Orientation;
+			}
+		}
+		
 		public abstract void Draw();
 
 		public void AddForce(Vector3D addForce)
 		{
-			velocity += addForce;
+			body.ApplyImpulse(JitterMath.ToJVector(addForce * 10));
 		}
 
 		public bool DoesRayHit(Vector3D ray)
