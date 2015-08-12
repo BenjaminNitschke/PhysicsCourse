@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using OpenTK;
 
 namespace PhysicsEngine
@@ -47,6 +48,13 @@ namespace PhysicsEngine
 			{
 				return (float)Math.Sqrt(x * x + y * y + z * z);
 			}
+		}
+
+		public override string ToString()
+		{
+			return x.ToString(CultureInfo.InvariantCulture) + ", " +
+						y.ToString(CultureInfo.InvariantCulture) + ", " +
+						z.ToString(CultureInfo.InvariantCulture);
 		}
 	}
 }

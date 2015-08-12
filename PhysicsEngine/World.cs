@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
+using Microsoft.Xna.Framework;
 using OpenTK;
 using PhysicsEngine.Physics3D;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
+using Vector3 = OpenTK.Vector3;
 
 namespace PhysicsEngine
 {
@@ -39,7 +41,10 @@ namespace PhysicsEngine
 
 		public static readonly List<Drawable> drawables = new List<Drawable>();
 		public static readonly List<PhysicsUpdatable> updateables = new List<PhysicsUpdatable>();
+		public static Vector3D cameraPosition;
+		public static Vector3D cameraTarget;
 		public static Matrix4 cameraMatrix;
+		public static Matrix4 projectionMatrix;
 
 		public static void Update(float deltaTime)
 		{
@@ -70,14 +75,30 @@ namespace PhysicsEngine
 			out Vector3D direction)
 		{
 			var ray = Raycast(screenWorldPosition);
-			//TODO: use ray
 			direction = ray;
-      return null;
+			foreach (var entity3D in updateables.OfType<Entity3D>())
+				if (entity3D.DoesRayHit(ray))
+					return entity3D;
+			return null;
 		}
 
 		private static Vector3D Raycast(Vector2D screenWorldPosition)
 		{
-			return new Vector3D(0, 1, 0);
+			var invertedProjection = Matrix.Invert(ToXnaMatrix(World.projectionMatrix));
+			var result = Microsoft.Xna.Framework.Vector3.TransformNormal(
+				new Microsoft.Xna.Framework.Vector3(screenWorldPosition.x, screenWorldPosition.y, 1), 
+        invertedProjection);
+			return //working test ray: new Vector3D(-0.02f, 1, 0.02f);
+				new Vector3D(result.X, 1, result.Y);
+		}
+
+		private static Matrix ToXnaMatrix(Matrix4 m)
+		{
+			return new Matrix(
+				m.M11, m.M12, m.M13, m.M14,
+				m.M21, m.M22, m.M23, m.M24,
+				m.M31, m.M32, m.M33, m.M34,
+				m.M41, m.M42, m.M43, m.M44);
 		}
 	}
 }

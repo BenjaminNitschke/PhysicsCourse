@@ -34,8 +34,9 @@ namespace PhysicsEngine
 		private static void InitializeCamera()
 		{
 			GL.MatrixMode(MatrixMode.Modelview);
-			World.cameraMatrix = Matrix4.LookAt(new Vector3(0, -12, 4), new Vector3(0, 0, 5.5f),
-				Vector3.UnitZ);
+			World.cameraPosition = new Vector3D(0, -5, 0);//12, 4);
+			World.cameraTarget = new Vector3D(0, 0, 0);//5.5f
+			World.cameraMatrix = Matrix4.LookAt(World.cameraPosition, World.cameraTarget, Vector3.UnitZ);
 			GL.LoadMatrix(ref World.cameraMatrix);
 			GL.Enable(EnableCap.DepthTest);
 		}
@@ -72,9 +73,9 @@ namespace PhysicsEngine
 		{
 			GL.MatrixMode(MatrixMode.Projection);
 			World.aspectRatio = window.Width / (float)window.Height;
-			var matrix = Matrix4.CreatePerspectiveFieldOfView(
+			World.projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(
 				Vector2D.DegreesToRadians(75), World.aspectRatio, 0.1f, 100);
-			GL.LoadMatrix(ref matrix);
+			GL.LoadMatrix(ref World.projectionMatrix);
 			GL.MatrixMode(MatrixMode.Modelview);
 		}
 
@@ -90,7 +91,7 @@ namespace PhysicsEngine
 			}
 			if (window.Keyboard[Key.Escape])
 				window.Exit();
-			if (window.Mouse[MouseButton.Left])
+			if (window.Mouse[MouseButton.Right])
 			{
 				if (startClickX == -1)
 				{
@@ -100,26 +101,26 @@ namespace PhysicsEngine
 				else if (window.Mouse.X - startClickX != 0 ||
 					window.Mouse.Y - startClickY != 0)
 				{
-					World.cameraMatrix = Matrix4.LookAt(new Vector3(
-						-10.0f + 30.0f*(window.Mouse.X - startClickX)/window.Width,
-						-6.0f + 30.0f * (window.Mouse.Y - startClickY)/window.Height, 4),
-						new Vector3(0, 0, 5.5f),
-						Vector3.UnitZ);
+					World.cameraPosition =
+						new Vector3D(-10.0f + 30.0f * (window.Mouse.X - startClickX) / window.Width,
+							-6.0f + 30.0f * (window.Mouse.Y - startClickY) / window.Height, 4);
+          World.cameraMatrix = Matrix4.LookAt(World.cameraPosition,
+						World.cameraTarget, Vector3.UnitZ);
         }
-				else
-				{
-					Vector3D direction;
-					var entity = World.GetEntity3DAt(new Vector2D(
-						-1f + 2 * (window.Mouse.X / (float)window.Width),
-						-1f + 2 * (window.Mouse.Y / (float)window.Height)), out direction);
-					if (entity != null)
-						entity.AddForce(direction * 100);
-				}
 			}
 			else
 			{
 				startClickX = -1;
 				startClickY = -1;
+			}
+			if (window.Mouse[MouseButton.Left])
+			{
+				Vector3D direction;
+				var entity = World.GetEntity3DAt(new Vector2D(
+					-1f + 2 * (window.Mouse.X / (float)window.Width),
+					-1f + 2 * (window.Mouse.Y / (float)window.Height)), out direction);
+				if (entity != null)
+					entity.AddForce(direction * 1);
 			}
 
 			titleUpdateTime += (float)e.Time;

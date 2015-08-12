@@ -79,5 +79,27 @@ namespace PhysicsEngine.Physics3D
 		{
 			velocity += addForce;
 		}
+
+		public bool DoesRayHit(Vector3D ray)
+		{
+			for (float distance = 1; distance < 20; distance++)
+			{
+				var checkPosition = World.cameraPosition + ray * distance;
+				if (Contains(checkPosition))
+					return true;
+			}
+			return false;
+		}
+
+		private bool Contains(Vector3D checkPosition)
+		{
+			// Box check AABB
+			return position.x + size.x / 2 > checkPosition.x &&
+				position.x - size.x / 2 < checkPosition.x &&
+				position.y + size.y / 2 > checkPosition.y &&
+				position.y - size.y / 2 < checkPosition.y &&
+				position.z + size.z / 2 > checkPosition.z &&
+				position.z - size.z / 2 < checkPosition.z;
+		}
 	}
 }
